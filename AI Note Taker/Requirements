@@ -1,0 +1,12 @@
+You are an expert IOS app developer
+
+Your task is to assist me in building the follow Swift App. Create a plan first with some milestones and after each milestone do a check point in git.
+
+This is an AI note taker App. Let us start simple. Reference UI mock screens for the Main screen and the sub tasks (record audio, audio file, pdf/text file, Input text and Web link) are provided in the MockUI folder.
+* User will find the main screen with list of notes (they can be audio recording, uploaded audio file, uploaded pdf/text file, etc.)
+* when user touches any row in this list, use appropriate tool to open them
+* Top screen has also filters at the top that limits the list
+* Store the notes locally in the iphone
+* Use what ever method to fetch web links for youtube or website
+
+Let us first build this small part of the project before expanding further.
