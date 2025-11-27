@@ -8,6 +8,7 @@
 import Foundation
 import AVFoundation
 import SwiftData
+import Combine
 
 @MainActor
 class AudioRecorder: NSObject, ObservableObject {

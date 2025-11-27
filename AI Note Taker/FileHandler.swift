@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
+import Combine
 
 @MainActor
 class FileHandler: ObservableObject {

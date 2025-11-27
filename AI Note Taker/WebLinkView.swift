@@ -74,6 +74,7 @@ struct WebLinkView: View {
                                     .background(Color(.systemGray6))
                                     .cornerRadius(8)
                                     .lineLimit(6)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             } else {
                                 Text("Tap 'Show' to display content preview")
                                     .font(.subheadline)
@@ -81,6 +82,7 @@ struct WebLinkView: View {
                                     .padding()
                                     .background(Color(.systemGray6))
                                     .cornerRadius(8)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                     }
