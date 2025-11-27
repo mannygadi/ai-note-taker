@@ -13,6 +13,7 @@ enum NoteType: String, CaseIterable, Codable {
     case file = "File"
     case text = "Text"
     case webLink = "Web Link"
+    case pdf = "PDF"
 }
 
 @Model

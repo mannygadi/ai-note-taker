@@ -40,16 +40,29 @@ struct ContentView: View {
                     .padding(.horizontal)
 
                     // Filter buttons
-                    HStack(spacing: 12) {
-                        FilterButton(title: "All", isSelected: selectedFilter == nil) {
-                            selectedFilter = nil
-                        }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            FilterButton(title: "All", isSelected: selectedFilter == nil) {
+                                selectedFilter = nil
+                            }
 
-                        ForEach(NoteType.allCases, id: \.self) { type in
-                            FilterButton(title: type.rawValue, isSelected: selectedFilter == type) {
-                                selectedFilter = type
+                            FilterButton(title: "Audio", isSelected: selectedFilter == .audio) {
+                                selectedFilter = .audio
+                            }
+
+                            FilterButton(title: "Files", isSelected: selectedFilter == .file) {
+                                selectedFilter = .file
+                            }
+
+                            FilterButton(title: "Text", isSelected: selectedFilter == .text) {
+                                selectedFilter = .text
+                            }
+
+                            FilterButton(title: "Links", isSelected: selectedFilter == .webLink) {
+                                selectedFilter = .webLink
                             }
                         }
+                        .padding(.horizontal)
                     }
                     .padding(.horizontal)
                 }
@@ -187,28 +200,135 @@ struct NoteDetailView: View {
 
 struct AddNoteView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
+    @State private var selectedNoteType: NoteType? = nil
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("Add Note - Coming Soon!")
-                    .font(.headline)
-                Text("Audio recording, file upload, text input, and web link features will be implemented in the next milestones.")
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding()
+            VStack(spacing: 40) {
+                // Header
+                VStack(spacing: 16) {
+                    Text("Add New Note")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    Text("Choose a note type to get started")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 20)
+
+                // Note Type Options
+                VStack(spacing: 20) {
+                    NoteTypeButton(
+                        type: .audio,
+                        title: "Record Audio",
+                        description: "Record audio using your microphone",
+                        icon: "waveform",
+                        color: .orange
+                    ) {
+                        selectedNoteType = .audio
+                    }
+
+                    NoteTypeButton(
+                        type: .file,
+                        title: "Upload File",
+                        description: "Upload audio, PDF, or text files",
+                        icon: "doc.fill",
+                        color: .blue
+                    ) {
+                        selectedNoteType = .file
+                    }
+
+                    NoteTypeButton(
+                        type: .text,
+                        title: "Create Text Note",
+                        description: "Type or paste text content",
+                        icon: "text.alignleft",
+                        color: .green
+                    ) {
+                        selectedNoteType = .text
+                    }
+
+                    NoteTypeButton(
+                        type: .webLink,
+                        title: "Add Web Link",
+                        description: "Save YouTube videos or webpages",
+                        icon: "link",
+                        color: .purple
+                    ) {
+                        selectedNoteType = .webLink
+                    }
+                }
+
+                Spacer()
             }
             .navigationTitle("Add Note")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
             }
         }
+        .sheet(item: $selectedNoteType) { noteType in
+            switch noteType {
+            case .audio:
+                AudioRecordingView()
+            case .file, .pdf:
+                FileUploadView()
+            case .text:
+                TextInputView()
+            case .webLink:
+                WebLinkView()
+            }
+        }
+    }
+}
+
+struct NoteTypeButton: View {
+    let type: NoteType
+    let title: String
+    let description: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(color)
+                    .frame(width: 60, height: 60)
+                    .overlay {
+                        Image(systemName: icon)
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Text(description)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .padding(16)
+            .background(Color(.systemGray6))
+            .cornerRadius(16)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -219,6 +339,7 @@ extension NoteType {
         case .file: return "doc.fill"
         case .text: return "text.alignleft"
         case .webLink: return "link"
+        case .pdf: return "doc.richtext"
         }
     }
 
@@ -228,6 +349,7 @@ extension NoteType {
         case .file: return .blue
         case .text: return .green
         case .webLink: return .purple
+        case .pdf: return .red
         }
     }
 }
