@@ -12,7 +12,7 @@ import SwiftData
 struct AI_Note_TakerApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Note.self,
+            NoteItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

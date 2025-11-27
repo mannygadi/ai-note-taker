@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var notes: [Note]
+    @Query private var notes: [NoteItem]
     @State private var selectedFilter: NoteType? = nil
     @State private var showingAddNoteSheet = false
 
